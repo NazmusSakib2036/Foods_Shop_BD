@@ -1,11 +1,15 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../styles/collection.css';
+import { productsData } from './productView';
 import Dog_F from '../product_image/dog_F.png';
 import Cat_F from '../product_image/cat_f.png';
 import Fish_F from '../product_image/fish_f.png';
 import Bird_F from '../product_image/bird_f.png';
 
 const Collection = () => {
+  const navigate = useNavigate();
+
   // Collection categories
   const collections = [
     {
@@ -31,6 +35,16 @@ const Collection = () => {
     
   ];
 
+  // Get product count for each category
+  const getProductCount = (categoryName) => {
+    return productsData.filter(product => product.category === categoryName).length;
+  };
+
+  // Handle category click
+  const handleCategoryClick = (categoryName) => {
+    navigate(`/category/${encodeURIComponent(categoryName)}`);
+  };
+
   return (
     <section className="collection-section">
       <div className="collection-container">
@@ -38,7 +52,11 @@ const Collection = () => {
         
         <div className="collection-grid">
           {collections.map((collection) => (
-            <div key={collection.id} className="collection-card">
+            <div 
+              key={collection.id} 
+              className="collection-card"
+              onClick={() => handleCategoryClick(collection.name.split('(')[0].trim())}
+            >
               {/* Checkmark Icon */}
               <div className="collection-check">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -54,6 +72,11 @@ const Collection = () => {
 
               {/* Collection Name */}
               <h3 className="collection-name">{collection.name}</h3>
+              
+              {/* Product Count */}
+              <p className="collection-product-count">
+                {getProductCount(collection.name.split('(')[0].trim())} Products
+              </p>
             </div>
           ))}
         </div>

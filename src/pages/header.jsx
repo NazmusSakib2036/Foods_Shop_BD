@@ -3,11 +3,26 @@ import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import "../styles/header.css";
 import logoImage from "../images/foodsshopbd.png";
+import { productsData } from "./productView";
+import ProductView from "./productView";
 
 const Header = () => {
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
   const { getCartCount } = useCart();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [showSearchResults, setShowSearchResults] = useState(false);
+  const [selectedProductId, setSelectedProductId] = useState(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const closeSidebar = () => {
+    setIsSidebarOpen(false);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,7 +38,36 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [prevScrollPos]);
 
+  useEffect(() => {
+    if (searchQuery.trim()) {
+      const results = productsData.filter(product =>
+        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.category.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setSearchResults(results);
+      setShowSearchResults(true);
+    } else {
+      setSearchResults([]);
+      setShowSearchResults(false);
+    }
+  }, [searchQuery]);
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleProductClick = (productId) => {
+    setSelectedProductId(productId);
+    setShowSearchResults(false);
+    setSearchQuery("");
+  };
+
+  const closeProductView = () => {
+    setSelectedProductId(null);
+  };
+
   return (
+    <>
     <header
       className={`header ${visible ? "header-visible" : "header-hidden"}`}
     >
@@ -41,22 +85,64 @@ const Header = () => {
       {/* Middle Section with Logo */}
       <div className="header-middle">
         <div className="header-container">
-          {/* Search Icon */}
-          <div className="search-icon">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="11" cy="11" r="8"></circle>
-              <path d="m21 21-4.35-4.35"></path>
-            </svg>
+          {/* Hamburger Menu Icon (Mobile Only) */}
+          <div className="hamburger-menu" onClick={toggleSidebar}>
+            <div className="hamburger-line"></div>
+            <div className="hamburger-line"></div>
+            <div className="hamburger-line"></div>
+          </div>
+
+          {/* Search Bar */}
+          <div className="search-container">
+            <div className="search-input-wrapper">
+              <svg
+                className="search-icon-svg"
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
+              </svg>
+              <input
+                type="text"
+                className="search-input"
+                placeholder="Search products..."
+                value={searchQuery}
+                onChange={handleSearchChange}
+              />
+            </div>
+            
+            {/* Search Results Dropdown */}
+            {showSearchResults && searchResults.length > 0 && (
+              <div className="search-results">
+                {searchResults.map((product) => (
+                  <div
+                    key={product.id}
+                    className="search-result-item"
+                    onClick={() => handleProductClick(product.id)}
+                  >
+                    <img src={product.image} alt={product.name} />
+                    <div className="search-result-info">
+                      <p className="search-result-name">{product.name}</p>
+                      <p className="search-result-price">Tk {product.currentPrice}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            
+            {showSearchResults && searchResults.length === 0 && searchQuery.trim() && (
+              <div className="search-results">
+                <div className="search-no-results">No products found</div>
+              </div>
+            )}
           </div>
 
           {/* Logo */}
@@ -125,16 +211,16 @@ const Header = () => {
             <a href="#best-seller">Best Seller</a>
           </li>
           <li className="nav-item">
-            <a href="#cat-food">Cat Food</a>
+            <Link to="/category/Cat Food">Cat Food</Link>
           </li>
           <li className="nav-item">
-            <a href="#dog-food">Dog Food</a>
+            <Link to="/category/Dog Food">Dog Food</Link>
           </li>
           <li className="nav-item">
-            <a href="#fish-food">Fish Food</a>
+            <Link to="/category/Fish Food">Fish Food</Link>
           </li>
           <li className="nav-item">
-            <a href="#bird-food">Bird Food</a>
+            <Link to="/category/Bird Food">Bird Food</Link>
           </li>
           <li className="nav-item">
             <a href="#pet-food">Pet Food</a>
@@ -154,6 +240,65 @@ const Header = () => {
         </ul>
       </nav>
     </header>
+
+    {/* Sidebar Overlay */}
+    {isSidebarOpen && (
+      <div className="sidebar-overlay sidebar-overlay-visible" onClick={closeSidebar}></div>
+    )}
+
+    {/* Sidebar Menu */}
+    <div className={`sidebar-menu ${isSidebarOpen ? 'sidebar-open' : ''}`}>
+      <div className="sidebar-header">
+        <h3>Categories</h3>
+        <button className="sidebar-close_b" onClick={closeSidebar}>
+          ✕
+        </button>
+      </div>
+      <ul className="sidebar-nav">
+        <li className="sidebar-nav-item" onClick={closeSidebar}>
+          <a href="#offer-zone">OFFER ZONE</a>
+        </li>
+        <li className="sidebar-nav-item" onClick={closeSidebar}>
+          <a href="#best-seller">Best Seller</a>
+        </li>
+        <li className="sidebar-nav-item" onClick={closeSidebar}>
+          <Link to="/category/Cat Food">Cat Food</Link>
+        </li>
+        <li className="sidebar-nav-item" onClick={closeSidebar}>
+          <Link to="/category/Dog Food">Dog Food</Link>
+        </li>
+        <li className="sidebar-nav-item" onClick={closeSidebar}>
+          <Link to="/category/Fish Food">Fish Food</Link>
+        </li>
+        <li className="sidebar-nav-item" onClick={closeSidebar}>
+          <Link to="/category/Bird Food">Bird Food</Link>
+        </li>
+        <li className="sidebar-nav-item" onClick={closeSidebar}>
+          <a href="#pet-food">Pet Food</a>
+        </li>
+        <li className="sidebar-nav-item" onClick={closeSidebar}>
+          <a href="#pet-dress">Pet Dress</a>
+        </li>
+        <li className="sidebar-nav-item" onClick={closeSidebar}>
+          <a href="#tea-nasta">Accessories</a>
+        </li>
+        <li className="sidebar-nav-item" onClick={closeSidebar}>
+          <a href="#snacks">Toys</a>
+        </li>
+        <li className="sidebar-nav-item" onClick={closeSidebar}>
+          <a href="#organic-oil">Supplements</a>
+        </li>
+      </ul>
+    </div>
+    
+    {/* Product View Modal */}
+    {selectedProductId && (
+      <ProductView
+        productId={selectedProductId}
+        onClose={closeProductView}
+      />
+    )}
+    </>
   );
 };
 

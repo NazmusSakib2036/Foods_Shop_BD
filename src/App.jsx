@@ -7,10 +7,13 @@ import Collection from './pages/colloection'
 import Slider from './pages/slider'
 import Cart from './pages/cart'
 import Checkout from './pages/checkout'
+import Category from './pages/category'
+import ScrollToTop from './components/ScrollToTop'
 
 function App() {
   return (
     <>
+      <ScrollToTop />
       <Header />
       <Routes>
         <Route path="/" element={
@@ -22,6 +25,7 @@ function App() {
         } />
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/category/:categoryName" element={<Category />} />
       </Routes>
       <Footer />
     </>

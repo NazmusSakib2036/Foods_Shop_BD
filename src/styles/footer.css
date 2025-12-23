@@ -185,6 +185,12 @@
   color: white;
 }
 
+.messenger-button svg {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
 .messenger-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(255, 140, 66, 0.5);
@@ -208,6 +214,12 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   z-index: 998;
   color: white;
+}
+
+.scroll-top-button svg {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
 }
 
 .scroll-top-button:hover {
@@ -320,23 +332,23 @@
   }
 
   .messenger-button {
-    width: 40px;
-    height: 40px;
+    width: 45px;
+    height: 45px;
   }
 
   .messenger-button svg {
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
   }
 
   .scroll-top-button {
-    width: 40px;
-    height: 40px;
-    bottom: 80px;
+    width: 45px;
+    height: 45px;
+    bottom: 90px;
   }
 
   .scroll-top-button svg {
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
   }
 }
