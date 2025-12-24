@@ -1,6 +1,6 @@
 import React from 'react';
 import '../styles/slider.css';
-import Pet_food from '../product_image/pet_food_1.png';
+import Pet_food from '../product_image/slider.png';
 
 const Slider = () => {
   return (

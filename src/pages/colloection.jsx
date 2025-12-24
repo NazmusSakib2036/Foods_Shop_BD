@@ -2,10 +2,10 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/collection.css';
 import { productsData } from './productView';
-import Dog_F from '../product_image/dog_F.png';
-import Cat_F from '../product_image/cat_f.png';
-import Fish_F from '../product_image/fish_f.png';
-import Bird_F from '../product_image/bird_f.png';
+import Dog_F from '../product_image/Lahxm4BWDuaUkX8u19bup0q3aKEUEHgZhPc9U4c3.jpg';
+import Cat_F from '../product_image/UQCXp1v685yumZj0MhX5Pd1FaAoqN0erh9FkoqZh.jpg';
+import Fish_F from '../product_image/uQo2el4YRcLP1O6a8xTJ25OatDRzcN7ElTaJhQij.jpg';
+import Bird_F from '../product_image/yVHIcK8fCsoxEF4qE6ADnbofEAcrLUQcx1OZPuZn.jpg';
 
 const Collection = () => {
   const navigate = useNavigate();
